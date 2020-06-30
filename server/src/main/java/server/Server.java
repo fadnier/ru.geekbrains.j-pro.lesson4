@@ -9,12 +9,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
+import java.util.concurrent.ExecutorService;
 
 
 public class Server {
     private List<ClientHandler> clients;
     private AuthService authService;
     private MessageService messageService;
+    private ExecutorService service;
 
     public Server() {
         clients = new Vector<>();
@@ -32,7 +34,7 @@ public class Server {
             while (true) {
                 socket = server.accept();
                 System.out.println("Клиент подключился ");
-                new ClientHandler(this, socket);
+                new ClientHandler(this, socket, service);
             }
 
         } catch (IOException | ClassNotFoundException | SQLException e) {
@@ -41,6 +43,7 @@ public class Server {
             try {
                 SqliteService.disconnect();
                 server.close();
+                service.shutdown();
             } catch (IOException e) {
                 e.printStackTrace();
             }

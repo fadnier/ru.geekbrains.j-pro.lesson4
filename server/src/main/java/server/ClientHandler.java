@@ -27,8 +27,6 @@ public class ClientHandler {
             in = new DataInputStream(socket.getInputStream());
             out = new DataOutputStream(socket.getOutputStream());
 
-            service = Executors.newFixedThreadPool(4);
-
             service.execute(() -> {
                 try {
                     //Если в течении 5 секунд не будет сообщений по сокету то вызовится исключение
